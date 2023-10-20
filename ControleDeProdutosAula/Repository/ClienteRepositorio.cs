@@ -54,11 +54,14 @@ namespace ControleDeProdutosAula.Repository
 			clienteDB.Telefone = cliente.Telefone;
 			clienteDB.CEP = cliente.CEP;
 			clienteDB.DataDeRegistro = cliente.DataDeRegistro;
-			#pragma warning disable CS8601 // Possible null reference assignment.
-			clienteDB.NomeDaFoto = cliente.NomeDaFoto;
-			clienteDB.Foto = cliente.Foto;
-			#pragma warning restore CS8601 // Possible null reference assignment.
 			clienteDB.Ativo = cliente.Ativo;
+
+			// Verifique se uma nova imagem foi enviada
+			if (cliente.Foto != null)
+			{
+				clienteDB.NomeDaFoto = cliente.NomeDaFoto;
+				clienteDB.Foto = cliente.Foto;
+			}
 
 			_bancoContext.Cliente.Update(clienteDB);
 			await _bancoContext.SaveChangesAsync();
@@ -66,7 +69,8 @@ namespace ControleDeProdutosAula.Repository
 			return await Task.FromResult(clienteDB);
 		}
 
-        public async Task<bool> Apagar(long id)
+
+		public async Task<bool> Apagar(long id)
         {
             ClienteModel clienteDB = await ListarPorId(id);
 
